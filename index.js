@@ -23,6 +23,9 @@ module.exports = (opts = { }) => {
         if (!['media', 'supports', 'document'].includes(rule.parent.name)) return
       }
       rule.selectors = rule.selectors.map(selector => {
+        if (selector === ':root') {
+          return opts.rootSelector
+        }
         const m = selector.match(globalRulesRe)
         if (m) {
           return insertRoot(m[1], m[2])

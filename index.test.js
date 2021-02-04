@@ -8,6 +8,12 @@ async function run (input, output, opts = { }) {
   expect(result.warnings()).toHaveLength(0)
 }
 
+it('should throw if not rootSector option specified', async () => {
+  expect(() => {
+    postcss([plugin({ })]).process('', { from: undefined })
+  }).toThrow()
+})
+
 it('adds root to tag', async () => {
   await run('a{color: red}', '.some-root a{color: red}', { rootSelector: '.some-root' })
 })
@@ -62,6 +68,10 @@ it('change every rule inside @supports rules', async () => {
 
 it('do not change @keyframes rules', async () => {
   await run('@keyframes some-transition{0%{opacity: 0}100%{opacity: 1}}', '@keyframes some-transition{0%{opacity: 0}100%{opacity: 1}}', { rootSelector: '.some-root' })
+})
+
+it('replace :root with new root', async () => {
+  await run(':root{--some-var: 12px}', '.some-root{--some-var: 12px}', { rootSelector: '.some-root' })
 })
 
 it('complex example should work', async () => {
