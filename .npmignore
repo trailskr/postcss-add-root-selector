@@ -7,3 +7,5 @@ yarn.lock
 .travis.yml
 .editorconfig
 coverage/
+.idea/
+.vscode/
