@@ -40,6 +40,13 @@ body,
   margin: 0;
   color: red !important;
 }
+
+/* ads root itself to * (all) rules */
+*,
+*:before,
+*:after {
+  box-sizing: border-box;
+}
 ```
 
 ## Output
@@ -85,6 +92,14 @@ body .some-root-selector {
 html,
 body {
   margin: 0;
+}
+
+/* ads root itself to * (all) selectors list */
+.some-root-selector,
+.some-root-selector *,
+.some-root-selector *:before,
+.some-root-selector *:after {
+  box-sizing: border-box;
 }
 ```
 

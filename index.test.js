@@ -128,6 +128,14 @@ it('replace :root with new root', async () => {
   await run(':root{--some-var: 12px}', '.some-root{--some-var: 12px}', { rootSelector: '.some-root' })
 })
 
+it('adds root to * (all) selector-lists', async () => {
+  await run('*,*::before{box-sizing: border-box;}', '.some-root,.some-root *,.some-root *::before{box-sizing: border-box;}', { rootSelector: '.some-root' })
+})
+
+it('do not change root selector itself', async () => {
+  await run('.some-root{margin:0}', '.some-root{margin:0}', { rootSelector: '.some-root' })
+})
+
 it('complex example should work', async () => {
   await run(`\
 .foo {

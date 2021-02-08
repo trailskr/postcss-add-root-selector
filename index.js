@@ -1,5 +1,5 @@
 const globalRulesRe = /^((?:body|html)(?:[^\w ][^ ]+)?)( .*)?/
-const inheritedDeclarationNamesRe = /^(?:color|font-.*|text-.*|line-height|letter-spacing|line-break|overflow-wrap|hyphens|tab-size|white-space|word-break|word-spacing)$/
+const inheritedDeclarationNamesRe = /^(?:color|font-.*|text-.*|line-height|letter-spacing|line-break|overflow-wrap|hyphens|tab-size|white-space|word-break|word-spacing|direction)$/
 
 /**
  * @param opts {{rootSelector: string}}
@@ -17,6 +17,7 @@ module.exports = (opts = { }) => {
   }
 
   const prependLocalSelector = selector => {
+    if (selector === opts.rootSelector) return selector
     if (selector === ':root') {
       return opts.rootSelector
     }
@@ -36,6 +37,10 @@ module.exports = (opts = { }) => {
       if (rule.parent.type === 'atrule') {
         if (!['media', 'supports', 'document'].includes(rule.parent.name)) return
       }
+      if (rule.selectors.some(selector => selector.startsWith('*'))) {
+        rule.selectors = [opts.rootSelector, ...rule.selectors]
+      }
+
       const global = []
       const local = []
       rule.selectors.forEach(selector => {
