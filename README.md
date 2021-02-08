@@ -31,6 +31,15 @@ body.desktop {
 body.desktop .bar {
   font-weight: bold;
 }
+
+/* self-applied declarations of html and body selectors will be not touched */
+/* mixed selectors will be properly split */
+html,
+body,
+.some-root-selector {
+  margin: 0;
+  color: red !important;
+}
 ```
 
 ## Output
@@ -59,6 +68,23 @@ body.desktop .some-root-selector {
 
 body.desktop .some-root-selector .bar {
   font-weight: bold;
+}
+
+/* self-applied declarations of html and body selectors will be not touched */
+/* mixed selectors will be properly split */
+.some-root .some-root-selector {
+  margin: 0;
+  color: red !important;
+}
+
+html .some-root-selector,
+body .some-root-selector {
+  color: red !important;
+}
+
+html,
+body {
+  margin: 0;
 }
 ```
 

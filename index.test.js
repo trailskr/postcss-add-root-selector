@@ -30,19 +30,73 @@ it('adds root to id selector', async () => {
   await run('#some{color: red}', '.some-root #some{color: red}', { rootSelector: '.some-root' })
 })
 
-it('adds root in between for global selector html', async () => {
-  await run('html{color: red}', 'html .some-root{color: red}', { rootSelector: '.some-root' })
+it('adds root to sub-selector', async () => {
+  await run('#some>.some{color: red}', '.some-root #some>.some{color: red}', { rootSelector: '.some-root' })
 })
 
-it('adds root in between for global selector body', async () => {
-  await run('body.desktop{color: red}', 'body.desktop .some-root{color: red}', { rootSelector: '.some-root' })
+it('adds root in between for global selector and inherited declarations', async () => {
+  await run('html{font-size: 10px}', 'html .some-root{font-size: 10px}', { rootSelector: '.some-root' })
 })
 
-it('adds root in between for global selector body with selector', async () => {
-  await run('body.desktop{color: red}', 'body.desktop .some-root{color: red}', { rootSelector: '.some-root' })
+it('preserves self-applied declarations to global elements', async () => {
+  await run('html,body{margin: 0}', 'html,body{margin: 0}', { rootSelector: '.some-root' })
 })
 
-it('adds root in between for global selector body with nested selector', async () => {
+it('split self-applied declarations to global elements, and adds root in between for inherited declarations', async () => {
+  await run(`\
+html,body{
+  margin: 0;
+  padding-top: 10px;
+  margin-left: 10px;
+  background: white;
+  background-color: red;
+  font-size: 14px;
+  font-family: Arial;
+  position: relative;
+  display: block;
+  top: 10px;
+  border-top-width: 1px;
+  outline: none;
+  color: red !important;
+}`, `\
+html .some-root,body .some-root{
+  font-size: 14px;
+  font-family: Arial;
+  color: red !important;
+}
+html,body{
+  margin: 0;
+  padding-top: 10px;
+  margin-left: 10px;
+  background: white;
+  background-color: red;
+  position: relative;
+  display: block;
+  top: 10px;
+  border-top-width: 1px;
+  outline: none;
+}`, { rootSelector: '.some-root' })
+})
+
+it('extracts not-global declarations for mixed global/not global selectors', async () => {
+  await run(`\
+html,body,.some-class{
+  margin: 0;
+  color: red !important;
+}`, `\
+.some-root .some-class{
+  margin: 0;
+  color: red !important;
+}
+html .some-root,body .some-root{
+  color: red !important;
+}
+html,body{
+  margin: 0;
+}`, { rootSelector: '.some-root' })
+})
+
+it('adds root in between for global selector body with nested selector and inherited declarations', async () => {
   await run('body:hover .some-class{color: red}', 'body:hover .some-root .some-class{color: red}', { rootSelector: '.some-root' })
 })
 
@@ -99,6 +153,10 @@ body.desktop {
 
 body.desktop .bar {
   font-weight: bold;
+}
+
+:root {
+  --some-var: 10px;
 }`, `\
 .some-root .foo {
   color: red;
@@ -123,5 +181,9 @@ body.desktop .some-root {
 
 body.desktop .some-root .bar {
   font-weight: bold;
+}
+
+.some-root {
+  --some-var: 10px;
 }`, { rootSelector: '.some-root' })
 })
