@@ -1,5 +1,5 @@
 const globalRulesRe = /^((?:body|html)(?:[^\w ][^ ]+)?)( .*)?/
-const inheritedDeclarationNamesRe = /^(?:color|font-.*|text-.*|line-height|letter-spacing|line-break|overflow-wrap|hyphens|tab-size|white-space|word-break|word-spacing|direction)$/
+const inheritedDeclarationNamesRe = /^(-webkit-|-moz-|-moz-osx-|-o-|-ms-)?(?:color|font-.*|text-.*|line-height|letter-spacing|line-break|overflow-wrap|hyphens|tab-size|white-space|word-break|word-spacing|direction)$/
 
 /**
  * @param opts {{rootSelector: string}}

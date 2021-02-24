@@ -35,7 +35,7 @@ it('adds root to sub-selector', async () => {
 })
 
 it('adds root in between for global selector and inherited declarations', async () => {
-  await run('html{font-size: 10px}', 'html .some-root{font-size: 10px}', { rootSelector: '.some-root' })
+  await run('html{font-size: 10px;-webkit-font-smoothing: antialiased}', 'html .some-root{font-size: 10px;-webkit-font-smoothing: antialiased}', { rootSelector: '.some-root' })
 })
 
 it('preserves self-applied declarations to global elements', async () => {
@@ -52,6 +52,8 @@ html,body{
   background-color: red;
   font-size: 14px;
   font-family: Arial;
+  font-smoothing: antialiased;
+  -webkit-font-smoothing: antialiased;
   position: relative;
   display: block;
   top: 10px;
@@ -62,6 +64,8 @@ html,body{
 html .some-root,body .some-root{
   font-size: 14px;
   font-family: Arial;
+  font-smoothing: antialiased;
+  -webkit-font-smoothing: antialiased;
   color: red !important;
 }
 html,body{
