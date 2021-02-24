@@ -227,6 +227,4 @@ Available options are:
 [other PostCSS plugins]: https://github.com/postcss/postcss#plugins
 [postcss-loader]:        https://github.com/postcss/postcss-loader
 [webpack]:               https://webpack.js.org/
-```
-
 [official docs]: https://github.com/postcss/postcss#usage
