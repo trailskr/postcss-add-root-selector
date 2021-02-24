@@ -175,7 +175,10 @@ module.exports = {
                 plugins: [
                   [
                     'postcss-preset-env',
-                    { rootSelector: '.some-root' }
+                    {
+                      include: ['some-style-lib.css'],
+                      rootSelector: '.some-root',
+                    }
                   ]
                 ]
               }
@@ -199,7 +202,10 @@ And create a `postcss.config.js` with:
 ```js
 module.exports = {
   plugins: [
-    require('postcss-add-root-selector')
+    require('postcss-add-root-selector')({
+      include: ['some-style-lib.css'],
+      rootSelector: '.my-root',
+    })
   ]
 }
 ```
@@ -215,6 +221,8 @@ addRootSelector({ rootSelector: '.some-root' })
 Available options are:
 
 * `rootSelector` (string): root selector (required).
+* `include` (Array<string | RegExp>): file masks to be included.
+* `exclude` (Array<string | RegExp>): file masks to be excluded.
 
 [other PostCSS plugins]: https://github.com/postcss/postcss#plugins
 [postcss-loader]:        https://github.com/postcss/postcss-loader
