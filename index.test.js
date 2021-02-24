@@ -1,17 +1,22 @@
 const postcss = require('postcss')
+const postcss7 = require('postcss7')
 
 const plugin = require('./')
 
-async function run (input, output, opts = { }) {
-  let result = await postcss([plugin(opts)]).process(input, { from: undefined })
+async function run (input, output, opts = { }, from) {
+  const result = await postcss([plugin(opts)]).process(input, { from })
   expect(result.css).toEqual(output)
   expect(result.warnings()).toHaveLength(0)
 }
 
 it('should throw if not rootSector option specified', async () => {
-  expect(() => {
-    postcss([plugin({ })]).process('', { from: undefined })
-  }).toThrow()
+  let err
+  try {
+    await postcss([plugin({})]).process('', {from: undefined})
+  } catch (e) {
+    err = e
+  }
+  expect(err).toBeInstanceOf(Error)
 })
 
 it('adds root to tag', async () => {
@@ -138,6 +143,30 @@ it('adds root to * (all) selector-lists', async () => {
 
 it('do not change root selector itself', async () => {
   await run('.some-root{margin:0}', '.some-root{margin:0}', { rootSelector: '.some-root' })
+})
+
+it('should include files', async () => {
+  await run('a{color: red}', '.some-root a{color: red}', { rootSelector: '.some-root', include: ['some.css'] }, 'some.css')
+})
+
+it('should exclude files', async () => {
+  await run('a{color: red}', 'a{color: red}', { rootSelector: '.some-root', exclude: ['some.css'] }, 'some.css')
+})
+
+it('should ignore empty exclude and include lists', async () => {
+  await run('a{color: red}', '.some-root a{color: red}', { rootSelector: '.some-root', exclude: [], include: [] }, 'some.css')
+})
+
+it('works with postcss v7 and v8', async () => {
+  const input = '.some-root{margin:0}'
+  const output = '.some-root{margin:0}'
+  const opts = { rootSelector: '.some-root' }
+  const result = await postcss([plugin.versionFormat(postcss)(opts)]).process(input, { from: undefined })
+  const result7 = await postcss7([plugin.versionFormat(postcss7)(opts)]).process(input, { from: undefined })
+  expect(result.css).toEqual(output)
+  expect(result7.css).toEqual(output)
+  expect(result.warnings()).toHaveLength(0)
+  expect(result7.warnings()).toHaveLength(0)
 })
 
 it('complex example should work', async () => {
