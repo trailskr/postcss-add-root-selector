@@ -1,6 +1,6 @@
 {
   "name": "postcss-add-root-selector",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "description": "PostCSS plugin adds root selector to all other rules",
   "keywords": [
     "postcss",
@@ -18,7 +18,7 @@
     "node": ">=10.0.0"
   },
   "peerDependencies": {
-    "postcss": "^7.0.35 | ^8.1.5"
+    "postcss": "^7.0.35 || ^8.1.5"
   },
   "devDependencies": {
     "clean-publish": "^1.1.8",
