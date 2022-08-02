@@ -34,6 +34,11 @@ const makeRuleProcessor = (opts = { }) => {
     const m = selector.match(globalRulesRe)
     return insertRoot(m[1], m[2])
   }
+  
+  const updateNodeParent = parent => node => {
+    node.parent = parent
+    return node
+  }
 
   return (rule) => {
     if (rule.parent.type === 'atrule') {
@@ -90,9 +95,8 @@ const makeRuleProcessor = (opts = { }) => {
     }
 
     const inheritedRule = rule.cloneBefore()
-    inheritedRule._skip = true
     inheritedRule.selectors = global.map(insertRootSelectorIntoGlobal)
-    inheritedRule.nodes = inherited
+    inheritedRule.nodes = inherited.map(updateNodeParent(inheritedRule))
 
     rule.nodes = selfApplied
   }
