@@ -34,7 +34,7 @@ const makeRuleProcessor = (opts = { }) => {
     const m = selector.match(globalRulesRe)
     return insertRoot(m[1], m[2])
   }
-  
+
   const updateNodeParent = parent => node => {
     node.parent = parent
     return node
@@ -42,7 +42,7 @@ const makeRuleProcessor = (opts = { }) => {
 
   return (rule) => {
     if (rule.parent.type === 'atrule') {
-      if (!['media', 'supports', 'document'].includes(rule.parent.name)) return
+      if (!['media', 'supports', 'document', 'container'].includes(rule.parent.name)) return
     }
     if (rule.selectors.some(selector => selector.startsWith('*'))) {
       rule.selectors = [opts.rootSelector, ...rule.selectors]

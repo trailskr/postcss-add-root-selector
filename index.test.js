@@ -117,8 +117,11 @@ it('add root to mixed global and local selectors', async () => {
   await run('.some-class,body,a{color: red}', '.some-root .some-class,body .some-root,.some-root a{color: red}', { rootSelector: '.some-root' })
 })
 
-it('change every rule inside @media rules', async () => {
+it('change every rule inside @media queries', async () => {
   await run('@media (max-width: 200px) {.some-class{color: red}}', '@media (max-width: 200px) {.some-root .some-class{color: red}}', { rootSelector: '.some-root' })
+})
+it('change every rule inside @container queries', async () => {
+  await run('@container some-container (width > 60ch) {.card h2{font-size: 2em}}', '@container some-container (width > 60ch) {.some-root .card h2{font-size: 2em}}', { rootSelector: '.some-root' })
 })
 
 it('change every rule inside @document rules', async () => {

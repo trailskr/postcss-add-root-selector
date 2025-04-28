@@ -2,6 +2,12 @@
 
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+## 1.0.6
+* added @container query support
+
+## 1.0.5
+* fixed issue with incorrect parent link
+
 ## 1.0.4
 * fixed package.json dependency syntax
 
